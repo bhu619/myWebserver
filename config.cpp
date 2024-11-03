@@ -137,8 +137,8 @@ void Config::parse_arg(int argc, char* argv[]) {
                 {
                     char *endptr;
                     TRIGMode = strtol(optarg, &endptr, 10);
-                    if (*endptr != '\0' ) {
-                        fprintf(stderr, "无效的触发模式：%s\n", optarg);
+                    if (*endptr != '\0' || TRIGMode < 0 || TRIGMode > 3) {
+                        fprintf(stderr, "无效的触发模式：%s (0: LT+LT; 1: LT+ET; 2: ET+LT; 3: ET+ET)\n", optarg);
                         exit(EXIT_FAILURE);
                     }
                 }

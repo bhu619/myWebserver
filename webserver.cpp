@@ -45,32 +45,28 @@ void WebServer::init(int port, string user, string passWord, string databaseName
     m_actormodel = actor_model;
 }
 
-/* 配置触发模式 */
+/* 配置触发模式, 设置服务器的监听套接字（m_LISTENTrigmode）和连接套接字（m_CONNTrigmode）的触发模式 */
 void WebServer::trig_mode()
 {
-    //LT + LT
-    if (0 == m_TRIGMode)
-    {
-        m_LISTENTrigmode = 0;
-        m_CONNTrigmode = 0;
+    
+    if (0 == m_TRIGMode) {
+        m_LISTENTrigmode = 0;   /* 监听套接字设置为 LT 模式 */
+        m_CONNTrigmode = 0;     /* 连接套接字设置为 LT 模式 */
     }
-    //LT + ET
-    else if (1 == m_TRIGMode)
-    {
-        m_LISTENTrigmode = 0;
-        m_CONNTrigmode = 1;
+
+    else if (1 == m_TRIGMode) {
+        m_LISTENTrigmode = 0;   /* 监听套接字设置为 LT 模式 */
+        m_CONNTrigmode = 1;     /* 连接套接字设置为 ET 模式 */
     }
-    //ET + LT
-    else if (2 == m_TRIGMode)
-    {
-        m_LISTENTrigmode = 1;
-        m_CONNTrigmode = 0;
+
+    else if (2 == m_TRIGMode) {
+        m_LISTENTrigmode = 1;   /* 监听套接字设置为 ET 模式 */
+        m_CONNTrigmode = 0;     /* 连接套接字设置为 LT 模式 */
     }
-    //ET + ET
-    else if (3 == m_TRIGMode)
-    {
-        m_LISTENTrigmode = 1;
-        m_CONNTrigmode = 1;
+
+    else if (3 == m_TRIGMode) {
+        m_LISTENTrigmode = 1;   /* 监听套接字设置为 ET 模式 */
+        m_CONNTrigmode = 1;     /* 连接套接字设置为 ET 模式 */
     }
 }
 
@@ -119,22 +115,22 @@ void WebServer::thread_pool()
     m_pool = new threadpool<http_conn>(m_actormodel, m_connPool, m_thread_num);
 }
 
+/* 事件监听 */
 void WebServer::eventListen()
 {
-    //网络编程基础步骤
-    m_listenfd = socket(PF_INET, SOCK_STREAM, 0);
-    assert(m_listenfd >= 0);
+    m_listenfd = socket(PF_INET, SOCK_STREAM, 0);   /* 创建一个套接字，使用IPv4，面向连接的字节流服务 */
+    assert(m_listenfd >= 0);                        /* 确保创建成功 */
 
-    //优雅关闭连接
-    if (0 == m_OPT_LINGER)
+    /* 优雅关闭连接 */
+    if (0 == m_OPT_LINGER)              /* 立即关闭套接字 */
     {
-        struct linger tmp = {0, 1};
+        struct linger tmp = {0, 1};     /* 用于操作SO_LINGER选项的结构体 */
         setsockopt(m_listenfd, SOL_SOCKET, SO_LINGER, &tmp, sizeof(tmp));
     }
-    else if (1 == m_OPT_LINGER)
+    else if (1 == m_OPT_LINGER)         /* 启用延迟关闭*/
     {
         struct linger tmp = {1, 1};
-        setsockopt(m_listenfd, SOL_SOCKET, SO_LINGER, &tmp, sizeof(tmp));
+        setsockopt(m_listenfd, SOL_SOCKET, SO_LINGER, &tmp, sizeof(tmp));   /* 设置套接字选项，确保套接字在关闭时能优雅地处理未完成的连接。 */
     }
 
     int ret = 0;

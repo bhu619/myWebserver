@@ -74,9 +74,9 @@ public:
     //epoll_event相关
     epoll_event events[MAX_EVENT_NUMBER];
 
-    int m_listenfd;                    /* 监听套接字文件描述符 */
+    int m_listenfd;                 /* 监听套接字文件描述符 */
     int m_OPT_LINGER;
-    int m_TRIGMode;
+    int m_TRIGMode;                 /* 触发模式 */
     int m_LISTENTrigmode;
     int m_CONNTrigmode;
 
