@@ -4,7 +4,6 @@
 #include <exception>
 #include <pthread.h>
 #include <semaphore.h>
-#include "../log/log.h"     /* 日志 */
 
 /* 信号量类 */
 class sem {
@@ -13,7 +12,6 @@ public:
     /* 构造函数 - 默认信号量值为 0 */
     sem() {
         if (sem_init(&m_sem, 0, 0) != 0) {
-            LOG_ERROR("Failed to initialize semaphore.");
             throw std::runtime_error("Failed to initialize semaphore");
         }
     }
@@ -21,7 +19,6 @@ public:
     /* 构造函数 - 可以设置初始信号量值 */
     sem(int num) {
         if (sem_init(&m_sem, 0, num) != 0) {
-            LOG_ERROR("Failed to initialize semaphore.");
             throw std::runtime_error("Failed to initialize semaphore");
         }
     }
@@ -82,40 +79,38 @@ private:
 /* 条件变量 */
 class cond {
 public:
-    cond()
-    {
-        if (pthread_cond_init(&m_cond, NULL) != 0)
-        {
+    cond() {
+        if (pthread_cond_init(&m_cond, NULL) != 0) {
             //pthread_mutex_destroy(&m_mutex);
             throw std::exception();
         }
     }
-    ~cond()
-    {
+
+    ~cond() {
         pthread_cond_destroy(&m_cond);
     }
-    bool wait(pthread_mutex_t *m_mutex)
-    {
+
+    bool wait(pthread_mutex_t *m_mutex) {
         int ret = 0;
         //pthread_mutex_lock(&m_mutex);
         ret = pthread_cond_wait(&m_cond, m_mutex);
         //pthread_mutex_unlock(&m_mutex);
         return ret == 0;
     }
-    bool timewait(pthread_mutex_t *m_mutex, struct timespec t)
-    {
+
+    bool timewait(pthread_mutex_t *m_mutex, struct timespec t) {
         int ret = 0;
         //pthread_mutex_lock(&m_mutex);
         ret = pthread_cond_timedwait(&m_cond, m_mutex, &t);
         //pthread_mutex_unlock(&m_mutex);
         return ret == 0;
     }
-    bool signal()
-    {
+
+    bool signal() {
         return pthread_cond_signal(&m_cond) == 0;
     }
-    bool broadcast()
-    {
+
+    bool broadcast() {
         return pthread_cond_broadcast(&m_cond) == 0;
     }
 
@@ -123,4 +118,5 @@ private:
     //static pthread_mutex_t m_mutex;
     pthread_cond_t m_cond;
 };
+
 #endif

@@ -54,8 +54,8 @@ public:
     
     int m_port;                     /* 服务器端口号 */
     char *m_root;                   /* 根目录 */
-    int m_log_write;                /* 同步 / 异步 日志 */
-    int m_close_log;                /* 开启日志 */
+    int m_log_write;                /* 0：同步日志; 1: 异步日志 */
+    int m_close_log;                /* 0：开启日志； 1：关闭日志 */
     int m_actormodel;               /* 线程池并发模式 */
 
     int m_pipefd[2];                /* 用于进程间通信的管道文件描述符 */

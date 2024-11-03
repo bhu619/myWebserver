@@ -85,7 +85,7 @@ void Config::display_usage() {
         "用法: server [选项]...\n"
         "选项列表:\n"
         "  -p <端口号>           设置服务器监听端口号 (默认: 9006)\n"
-        "  -l <日志写入方式>     设置日志写入方式 (0: 同步, 1: 异步, 默认: 0)\n"
+        "  -l <日志写入方式>     设置日志写入方式 (0: 同步日志; 1: 异步日志; 默认: 0)\n"
         "  -m <触发模式>         设置触发模式 (0~3, 默认: 0)\n"
         "                         0: listenfd LT + connfd LT\n"
         "                         1: listenfd LT + connfd ET\n"
@@ -94,7 +94,7 @@ void Config::display_usage() {
         "  -o <优雅关闭连接>     是否使用优雅关闭连接 (0: 不使用, 1: 使用, 默认: 0)\n"
         "  -s <数据库连接数>     设置数据库连接池连接数 (默认: 8)\n"
         "  -t <线程数>           设置线程池内线程数量 (默认: 8)\n"
-        "  -c <关闭日志>         是否关闭日志 (0: 不关闭, 1: 关闭, 默认: 0)\n"
+        "  -c <关闭日志>         是否关闭日志 (0: 开启, 1: 关闭, 默认: 0)\n"
         "  -a <并发模型>         选择并发模型 (0: Proactor, 1: Reactor, 默认: 0)\n"
         "  -h                    显示此帮助信息\n"
         "示例:\n"
@@ -111,7 +111,7 @@ void Config::parse_arg(int argc, char* argv[]) {
     while ((opt = getopt(argc, argv, str)) != -1) {
         switch (opt) {
             
-            case 'p': // 设置端口号，范围应在 1 到 65535 之间。
+            case 'p':   /* 设置端口号，范围应在 1 到 65535 之间 */ 
                 {
                     char *endptr;
                     PORT = strtol(optarg, &endptr, 10);
@@ -122,12 +122,12 @@ void Config::parse_arg(int argc, char* argv[]) {
                 }
                 break;
             
-            case 'l':
+            case 'l':   /* 设置日志写入方式 */
                 {
                     char *endptr;
                     LOGWrite = strtol(optarg, &endptr, 10);
-                    if (*endptr != '\0' ) {
-                        fprintf(stderr, "无效的日志写入方式：%s\n", optarg);
+                    if (*endptr != '\0' || LOGWrite < 0 || LOGWrite > 1) {
+                        fprintf(stderr, "无效的日志写入方式：%s (0: 同步日志; 1: 异步日志)\n", optarg);
                         exit(EXIT_FAILURE);
                     }
                 }
