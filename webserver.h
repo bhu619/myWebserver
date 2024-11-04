@@ -75,10 +75,10 @@ public:
     epoll_event events[MAX_EVENT_NUMBER];
 
     int m_listenfd;                 /* 监听套接字文件描述符 */
-    int m_OPT_LINGER;
+    int m_OPT_LINGER;               /* 延迟关闭/优雅关闭 */
     int m_TRIGMode;                 /* 触发模式 */
-    int m_LISTENTrigmode;
-    int m_CONNTrigmode;
+    int m_LISTENTrigmode;           /* 监听套接字触发模式 */
+    int m_CONNTrigmode;             /* 连接套接字触发模式 */
 
     //定时器相关
     client_data *users_timer;

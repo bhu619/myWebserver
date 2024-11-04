@@ -19,6 +19,7 @@ WebServer::WebServer()
 
 WebServer::~WebServer()
 {
+    /* 释放内存和资源 */
     close(m_epollfd);
     close(m_listenfd);
     close(m_pipefd[1]);
@@ -134,33 +135,38 @@ void WebServer::eventListen()
     }
 
     int ret = 0;
-    struct sockaddr_in address;
-    bzero(&address, sizeof(address));
-    address.sin_family = AF_INET;
-    address.sin_addr.s_addr = htonl(INADDR_ANY);
-    address.sin_port = htons(m_port);
+    struct sockaddr_in address;                     /* TCP/IP 协议族结构体 */
+    bzero(&address, sizeof(address));               /* 将 address 结构体的所有字节设置为 0，确保未使用的字段被清零 */
+    address.sin_family = AF_INET;                   /* 地址族，IPv4 */
+    address.sin_addr.s_addr = htonl(INADDR_ANY);    /* INADDR_ANY 表示监听所有可用的接口（IPv4地址） */
+    address.sin_port = htons(m_port);               /* htons 将端口号的主机字节序转换为网络字节序 */
 
     int flag = 1;
+    /* 
+        设置的具体选项为地址重用。
+        当设置了这个选项后，允许在相同的 IP 地址和端口上快速重用套接字，即使之前的连接还处于 TIME_WAIT 状态。
+        这在服务器程序中很有用，特别是当服务器需要快速重启时，可以避免因为等待 TIME_WAIT 状态结束而导致的延迟。 
+    */
     setsockopt(m_listenfd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
-    ret = bind(m_listenfd, (struct sockaddr *)&address, sizeof(address));
+    ret = bind(m_listenfd, (struct sockaddr *)&address, sizeof(address));   /* 绑定套接字到指定的地址和端口 */
     assert(ret >= 0);
-    ret = listen(m_listenfd, 5);
+    ret = listen(m_listenfd, 5);                    /* 监听队列长度为5 */   
     assert(ret >= 0);
 
-    utils.init(TIMESLOT);
+    utils.init(TIMESLOT);                           /* 初始化定时器 */
 
     //epoll创建内核事件表
-    epoll_event events[MAX_EVENT_NUMBER];
-    m_epollfd = epoll_create(5);
+    epoll_event events[MAX_EVENT_NUMBER];           /* 事件数组，用于存储 epoll 检测到的事件 */
+    m_epollfd = epoll_create(5);                    /* 创建一个 epoll 实例 */
     assert(m_epollfd != -1);
 
     utils.addfd(m_epollfd, m_listenfd, false, m_LISTENTrigmode);
-    http_conn::m_epollfd = m_epollfd;
+    http_conn::m_epollfd = m_epollfd;               /* 将 epoll 文件描述符赋值给 http_conn 类的静态成员变量，用于处理 HTTP 连接 */
 
-    ret = socketpair(PF_UNIX, SOCK_STREAM, 0, m_pipefd);
+    ret = socketpair(PF_UNIX, SOCK_STREAM, 0, m_pipefd);    /* 创建一对无名管道，用于在进程内部进行双向通信，常用于信号处理 */
     assert(ret != -1);
-    utils.setnonblocking(m_pipefd[1]);
-    utils.addfd(m_epollfd, m_pipefd[0], false, 0);
+    utils.setnonblocking(m_pipefd[1]);              /* 将管道的写端设置为非阻塞模式 */
+    utils.addfd(m_epollfd, m_pipefd[0], false, 0);  /* 将管道的读端添加到 epoll 实例中，用于监听信号 */
 
     utils.addsig(SIGPIPE, SIG_IGN);
     utils.addsig(SIGALRM, utils.sig_handler, false);
