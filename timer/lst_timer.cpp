@@ -207,16 +207,23 @@ void Utils::addfd(int epollfd, int fd, bool one_shot, int TRIGMode)
     }
 }
 
-/* 信号处理函数 */
+/* 信号处理函数,将接收到的信号写入 u_pipefd 管道中，将信号传递到主事件循环 */
 void Utils::sig_handler(int sig) {
 
     int save_errno = errno;                     /* 保证函数的可重入性，保留原来的errno */
     int msg = sig;
-    write(u_pipefd[1], (char *)&msg, 1);        /* 将send替换为write, write异步信号安全 */ 
+       
+    /* 将send替换为write, write异步信号安全 */ 
+    if (write(u_pipefd[1], &msg, sizeof(msg)) == -1) {
+        if (errno != EAGAIN) {
+            std::cerr << "write to pipe failed: " << strerror(errno) << std::endl;
+        }
+    }
+
     errno = save_errno;
 }
 
-/* 设置指定信号的处理函数 */
+/* 设置指定信号 sig 的处理函数 handler */
 void Utils::addsig(int sig, void(handler)(int), bool restart) {
     struct sigaction sa;
     memset(&sa, '\0', sizeof(sa));
@@ -255,9 +262,15 @@ void Utils::show_error(int connfd, const char *info)
     if (bytes_sent == -1) {
         std::cerr << "send failed: " << strerror(errno) << std::endl;
     }
+              
+    /* 优雅关闭写 */
+    if (shutdown(connfd, SHUT_WR) == -1) {
+        std::cerr << "shutdown failed: " << strerror(errno) << std::endl;
+    }
 
-    shutdown(connfd, SHUT_RDWR);                /* 同时关闭连接的读和写两个方向 */
-    close(connfd);
+    if (close(connfd) == -1) {
+        std::cerr << "close failed: " << strerror(errno) << std::endl;
+    }
 }
 
 int *Utils::u_pipefd = 0;
@@ -276,8 +289,6 @@ void cb_func(client_data *user_data) {
     if (epoll_ctl(Utils::u_epollfd, EPOLL_CTL_DEL, user_data->sockfd, nullptr) == -1) {
         std::cerr << "epoll_ctl DEL failed: " << strerror(errno) << std::endl;
     }
-
-    assert(user_data);
 
     if (close(user_data->sockfd) == -1) {
         std::cerr << "close failed: " << strerror(errno) << std::endl;
