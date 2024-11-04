@@ -27,14 +27,17 @@
 #include "../timer/lst_timer.h"
 #include "../log/log.h"
 
-class http_conn
-{
+class http_conn {
 public:
-    static const int FILENAME_LEN = 200;
-    static const int READ_BUFFER_SIZE = 2048;
-    static const int WRITE_BUFFER_SIZE = 1024;
-    enum METHOD
-    {
+
+    /* 静态常量 */
+    static const int FILENAME_LEN = 200;        /* 文件路径长度 */
+    static const int READ_BUFFER_SIZE = 2048;   /* 读取缓冲区的大小 */
+    static const int WRITE_BUFFER_SIZE = 1024;  /* 写入缓冲区的大小 */
+
+    /* 枚举类型 */
+    /* 支持的 HTTP 请求方法 */
+    enum METHOD {
         GET = 0,
         POST,
         HEAD,
@@ -45,14 +48,16 @@ public:
         CONNECT,
         PATH
     };
-    enum CHECK_STATE
-    {
+
+    /* HTTP 请求的解析状态 */
+    enum CHECK_STATE {
         CHECK_STATE_REQUESTLINE = 0,
         CHECK_STATE_HEADER,
         CHECK_STATE_CONTENT
     };
-    enum HTTP_CODE
-    {
+
+    /* 定义服务器处理请求后的状态 */
+    enum HTTP_CODE {
         NO_REQUEST,
         GET_REQUEST,
         BAD_REQUEST,
@@ -62,8 +67,8 @@ public:
         INTERNAL_ERROR,
         CLOSED_CONNECTION
     };
-    enum LINE_STATUS
-    {
+
+    enum LINE_STATUS {
         LINE_OK = 0,
         LINE_BAD,
         LINE_OPEN
@@ -74,17 +79,26 @@ public:
     ~http_conn() {}
 
 public:
+
+    /* 初始化连接 */
     void init(int sockfd, const sockaddr_in &addr, char *, int, int, string user, string passwd, string sqlname);
+    
+    /* 关闭连接 */
     void close_conn(bool real_close = true);
+    
+    /* 主业务处理函数 */
     void process();
+
     bool read_once();
+
     bool write();
-    sockaddr_in *get_address()
-    {
-        return &m_address;
-    }
+
+    sockaddr_in *get_address() { return &m_address; }
+
+    /* 初始化 MySQL 结果集 */
     void initmysql_result(connection_pool *connPool);
-    int timer_flag;
+
+    int timer_flag;             /* 定时器标志位 */
     int improv;
 
 
@@ -109,8 +123,8 @@ private:
     bool add_blank_line();
 
 public:
-    static int m_epollfd;
-    static int m_user_count;
+    static int m_epollfd;                   /* 内核事件表 */
+    static int m_user_count;                /* 记录当前活跃连接的总数 */
     MYSQL *mysql;
     int m_state;  //读为0, 写为1
 

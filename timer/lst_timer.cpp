@@ -174,9 +174,9 @@ int Utils::setnonblocking(int fd) {
     return old_option;
 }
 
-/* 将内核事件表注册读事件，ET模式，选择开启EPOLLONESHOT */
-void Utils::addfd(int epollfd, int fd, bool one_shot, int TRIGMode)
-{
+/* 将可读事件注册到内核时间表中，设置事件触发类型，选择是否开启EPOLLONESHOT选项 */
+void Utils::addfd(int epollfd, int fd, bool one_shot, int TRIGMode) {
+
     epoll_event event;                          /* 用于描述要注册的事件 */
     event.data.fd = fd;
 

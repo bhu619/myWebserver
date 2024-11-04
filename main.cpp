@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[])
 {
-    //需要修改的数据库信息,登录名,密码,库名
+    /* 需要修改的数据库信息,登录名,密码,库名 */
     string user = "root";
     string passwd = "Aa111222!";
     string databasename = "yourdb";
@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
 
     server.thread_pool();
 
-    //触发模式
     server.trig_mode();
 
     //监听

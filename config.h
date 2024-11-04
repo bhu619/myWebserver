@@ -11,11 +11,10 @@ public:
     Config();
     ~Config(){};
 
-    void parse_arg(int argc, char*argv[]);	// 使用 getopt 函数来解析命令行参数。
+    void parse_arg(int argc, char*argv[]);      /* 使用 getopt 函数来解析命令行参数 */
 
-    void display_usage();           // 显示帮助信息
+    void display_usage();                       /* 显示帮助信息 */
 
-    // 成员函数
     int PORT;           // 端口号 (默认为9006)
 
     int LOGWrite;       // 日志写入方式 (默认同步写入且不关闭)
