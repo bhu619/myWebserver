@@ -120,7 +120,11 @@ void WebServer::thread_pool()
 void WebServer::eventListen()
 {
     m_listenfd = socket(PF_INET, SOCK_STREAM, 0);   /* 创建一个套接字，使用IPv4，面向连接的字节流服务 */
-    assert(m_listenfd >= 0);                        /* 确保创建成功 */
+    
+    if (m_listenfd < 0) {                           /* 确保创建成功 */
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
+    }                      
 
     /* 优雅关闭连接 */
     if (0 == m_OPT_LINGER)              /* 立即关闭套接字 */
@@ -134,7 +138,6 @@ void WebServer::eventListen()
         setsockopt(m_listenfd, SOL_SOCKET, SO_LINGER, &tmp, sizeof(tmp));   /* 设置套接字选项，确保套接字在关闭时能优雅地处理未完成的连接。 */
     }
 
-    int ret = 0;
     struct sockaddr_in address;                     /* TCP/IP 协议族结构体 */
     bzero(&address, sizeof(address));               /* 将 address 结构体的所有字节设置为 0，确保未使用的字段被清零 */
     address.sin_family = AF_INET;                   /* 地址族，IPv4 */
@@ -148,23 +151,42 @@ void WebServer::eventListen()
         这在服务器程序中很有用，特别是当服务器需要快速重启时，可以避免因为等待 TIME_WAIT 状态结束而导致的延迟。 
     */
     setsockopt(m_listenfd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
-    ret = bind(m_listenfd, (struct sockaddr *)&address, sizeof(address));   /* 绑定套接字到指定的地址和端口 */
-    assert(ret >= 0);
-    ret = listen(m_listenfd, 5);                    /* 监听队列长度为5 */   
-    assert(ret >= 0);
+
+    /* 绑定套接字到指定的地址和端口 */
+    if (bind(m_listenfd, (struct sockaddr *)&address, sizeof(address)) < 0) {
+        perror("Bind failed");
+        close(m_listenfd);
+        exit(EXIT_FAILURE);
+    }
+
+    /* 监听队列长度为5 */
+    if (listen(m_listenfd, 5) < 0) {
+        perror("Listen failed");
+        close(m_listenfd);
+        exit(EXIT_FAILURE);
+    }
 
     utils.init(TIMESLOT);                           /* 初始化定时器 */
 
     //epoll创建内核事件表
     epoll_event events[MAX_EVENT_NUMBER];           /* 事件数组，用于存储 epoll 检测到的事件 */
     m_epollfd = epoll_create(5);                    /* 创建一个 epoll 实例 */
-    assert(m_epollfd != -1);
+    if (m_epollfd == -1) {
+        perror("Epoll creation failed");
+        close(m_listenfd);
+        exit(EXIT_FAILURE);
+    }
 
     utils.addfd(m_epollfd, m_listenfd, false, m_LISTENTrigmode);
     http_conn::m_epollfd = m_epollfd;               /* 将 epoll 文件描述符赋值给 http_conn 类的静态成员变量，用于处理 HTTP 连接 */
 
-    ret = socketpair(PF_UNIX, SOCK_STREAM, 0, m_pipefd);    /* 创建一对无名管道，用于在进程内部进行双向通信，常用于信号处理 */
-    assert(ret != -1);
+    /* 创建一对无名管道，用于在进程内部进行双向通信，常用于信号处理 */
+    if (socketpair(PF_UNIX, SOCK_STREAM, 0, m_pipefd) == -1) {
+        perror("Socketpair creation failed");
+        close(m_listenfd);
+        exit(EXIT_FAILURE);
+    }
+
     utils.setnonblocking(m_pipefd[1]);              /* 将管道的写端设置为非阻塞模式 */
     utils.addfd(m_epollfd, m_pipefd[0], false, 0);  /* 将管道的读端添加到 epoll 实例中，用于监听信号 */
 
