@@ -1,27 +1,163 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>WebServer</title>
-    </head>
-    <body>
-    <br/>
-    <br/>
-    <div align="center"><font size="5"> <strong>是时候做出选择了</strong></font></div>
-	<br/>
-		<br/>
-		<form action="5" method="post">
- 			<div align="center"><button type="submit">xxx.jpg</button></div>
-                </form>
-		<br/>
-                <form action="6" method="post">
-                        <div align="center"><button type="submit" >xxx.avi</button></div>
-                </form>
-		<br/>
-		<form action="7" method="post">
- 			<div align="center"><button type="submit">关注我</button></div>
-                </form>
-		
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>welcome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 5px 40px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            height: 70px;
+        }
+
+        .home-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ff416c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(255, 65, 108, 0.3);
+            text-decoration: none;
+        }
+
+        .home-button:hover {
+            background-color: #ff2650;
+            box-shadow: 0 6px 12px rgba(255, 65, 108, 0.5);
+        }
+
+        .home-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            filter: brightness(0) invert(1);
+        }
+
+        .container {
+            width: 400px;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: auto;
+            margin-top: 100px;
+            transform: translateY(50%);
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #9694FF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #FFCCEA;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-content {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 确保图标和文字水平居中 */
+            gap: 10px; /* 图标和文字之间的间距 */
+            text-align: center;
+            width: 100%;
+        }
+
+        .button-content img {
+            display: inline-block; /* 图标正常显示 */
+        }
+
+        .button-content span {
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/home.html" class="home-button">
+            <img src="https://img.icons8.com/?size=100&id=Q1xkcFuVON39&format=png&color=000000" alt="home icon">
+            退出
+        </a>
+    </div>
+
+    <div class="container">
+        <h1>欢迎来到我的网页，目前只支持以下操作哦</h1>
+        <div class="button-group">
+            <form action="5" method="post">
+                <button type="submit">
+                    <div class="button-content">
+                        <img src="https://img.icons8.com/material-rounded/24/ffffff/image.png" alt="image icon">
+                        <span>图片</span>
+                    </div>
+                </button>
+            </form>
+            <form action="6" method="post">
+                <button type="submit">
+                    <div class="button-content">
+                        <img src="https://img.icons8.com/material-rounded/24/ffffff/video.png" alt="video icon">
+                        <span>视频</span>
+                    </div>
+                </button>
+            </form>
+            <form action="7" method="post">
+                <button type="submit">
+                    <div class="button-content">
+                        <img src="https://img.icons8.com/material-rounded/24/ffffff/star.png" alt="star icon">
+                        <span>关注我</span>
+                    </div>
+                </button>
+            </form>
         </div>
-    </body>
+    </div>
+</body>
 </html>

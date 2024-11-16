@@ -124,12 +124,15 @@ void connection_pool::DestroyPool()
 {
 
 	lock.lock();
+
     if (!connList.empty())
     {
         connList.clear();  // 清空列表，智能指针会自动释放所有连接
     }
+
     m_CurConn = 0;
     m_FreeConn = 0;
+	
     lock.unlock();
 }
 

@@ -1,22 +1,195 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Sign up</title>
-    </head>
-    <body>
-<br/>
-<br/>
-    <div align="center"><font size="5"> <strong>注册</strong></font></div>
-    <br/>
-        <div class="login">
-                <form action="3CGISQL.cgi" method="post">
-                        <div align="center"><input type="text" name="user" placeholder="用户名" required="required"></div><br/>
-                        <div align="center"><input type="password" name="password" placeholder="用户密码" required="required"></div><br/>
-                        <div align="center"><button type="submit">注册</button></div>
-                </form>
-		<div  align="center">提示：该用户名被注册.</div>
-        </div>
-    </body>
-</html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册</title>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
 
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 5px 40px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            height: 70px;
+        }
+
+        .home-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ff416c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(255, 65, 108, 0.3);
+            text-decoration: none;
+        }
+
+        .home-button:hover {
+            background-color: #ff2650;
+            box-shadow: 0 6px 12px rgba(255, 65, 108, 0.5);
+        }
+
+        .home-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+
+        /* 主内容样式 */
+        .container {
+            width: 400px;
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: auto;
+            margin-top: 120px; /* 留出顶部导航栏的空间 */
+            transform: translateY(50%);
+        }
+
+        .container h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .container p {
+            font-size: 14px;
+            color: #666;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #ff416c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #ff2650;
+        }
+
+        .terms {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .terms a {
+            color: #ff416c;
+            text-decoration: none;
+        }
+    </style>
+    <script>
+        function validateForm() {
+            const password = document.querySelector('input[name="password"]').value;
+            const confirmPassword = document.querySelector('input[name="confirm_password"]').value;
+
+            if (password !== confirmPassword) {
+                alert("密码和确认密码不匹配！");
+                return false;
+            }
+
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                alert("密码必须至少包含8个字符，包含一个大写字母和一个数字！");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="header">
+        <a href="/home.html" class="home-button">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/home.png" alt="home icon">
+            首页
+        </a>
+    </div>
+
+    <!-- 注册内容 -->
+    <div class="container">
+        <h2>注册</h2>
+        <form action="3CGISQL.cgi" method="post" onsubmit="return validateForm();">
+            <div class="input-group">
+                <label for="user">用户名</label>
+                <input type="text" id="user" name="user" placeholder="请输入用户名" required>
+            </div>
+            <div class="input-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" placeholder="密码必须至少包含8个字符，包含一个大写字母和一个数字" required>
+            </div>
+            <div class="input-group">
+                <label for="confirm_password">确认密码</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="请确认密码" required>
+            </div>
+            <button type="submit" class="submit-btn">注册</button>
+            <p class="terms">
+                注册即代表同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a>
+            </p>
+        </form>
+    </div>
+
+    <script>
+        // 弹出提示框告知用户登录错误
+        window.onload = function() {
+            alert("该用户名已经存在");
+        };
+    </script>
+</body>
+</html>

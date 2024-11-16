@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主页</title>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 5px 40px; /* 增加右侧内边距 */
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            height: 70px;
+        }
+
+        /* 按钮样式 */
+        .header .button-group {
+            display: flex;
+            gap: 20px; /* 按钮之间的间距 */
+            transform: translateX(-70px); /* 向左移动 20px */
+        }
+
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ff416c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(255, 65, 108, 0.3);
+        }
+
+        .button:hover {
+            background-color: #ff2650;
+            box-shadow: 0 6px 12px rgba(255, 65, 108, 0.5);
+        }
+
+        .button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            filter: brightness(0) invert(1); /* 将图标变为白色 */
+        }
+
+        /* 中间主要内容 */
+        .main {
+            margin-top: 120px; /* 避免与固定的导航栏重叠 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transform: translateY(150%)
+        }
+
+        .main h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* 搜索框样式 */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            padding: 15px 25px; /* 增加内边距 */
+            width: 700px; /* 增大宽度 */
+            max-width: 90%;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 18px; /* 增大字体大小 */
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .search-bar input::placeholder {
+            color: #aaa;
+        }
+
+        .search-bar .icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-bar .icons img {
+            width: 24px; /* 增大图标大小 */
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .search-bar .icons img:hover {
+            opacity: 0.8;
+        }
+
+        .search-bar .send-btn {
+            background-color: #e0e0e0;
+            width: 40px; /* 增大按钮宽度 */
+            height: 40px; /* 增大按钮高度 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar .send-btn:hover {
+            background-color: #d6d6d6;
+        }
+
+        .search-bar .send-btn img {
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="header">
+        <div class="button-group">
+            <!-- 注册按钮 -->
+            <form action="0" method="post" style="margin: 0;">
+                <button type="submit" class="button">
+                    <img src="https://img.icons8.com/?size=100&id=IVlCJgXg1RYx&format=png&color=000000" alt="register icon">
+                    注册
+                </button>
+            </form>
+
+            <!-- 登录按钮 -->
+            <form action="1" method="post" style="margin: 0;">
+                <button type="submit" class="button">
+                    <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=000000" alt="login icon" >
+                    登录
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 中间主要内容 -->
+    <div class="main">
+        <h1>你好，我是bhu619，我可以如何帮助你？</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="你可以问我任何问题...(反正我也不会回答)">
+            <div class="icons">
+                <img src="https://img.icons8.com/?size=100&id=59728&format=png&color=000000" alt="附件">
+                <img src="https://img.icons8.com/?size=100&id=F9t4EFmC0f9O&format=png&color=000000" alt="图片">
+                <img src="https://img.icons8.com/?size=100&id=85796&format=png&color=000000" alt="语音">
+                <div class="send-btn">
+                    <img src="https://img.icons8.com/?size=100&id=4AFQiYvNyHT3&format=png&color=000000" alt="发送">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

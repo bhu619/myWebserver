@@ -64,6 +64,10 @@ void http_conn::initmysql_result(connection_pool *connPool) {
         if (row[0] && row[1]) {
             std::string userName(row[0]);
             std::string passWord(row[1]);
+
+            // 打印用户名和密码
+            //printf("Username: %-10s | Password: %-10s\n", row[0], row[1]);
+
             users[userName] = passWord;
         }
     }
@@ -222,32 +226,55 @@ void http_conn::init() {
     memset(m_real_file, '\0', FILENAME_LEN);
 }
 
-//从状态机，用于分析出一行内容
 //返回值为行的读取状态，有LINE_OK,LINE_BAD,LINE_OPEN
-http_conn::LINE_STATUS http_conn::parse_line() {
-
+/* 从状态机，用于解析 HTTP 请求的缓冲区内容，按行读取数据。它通过检查缓冲区中的特殊字符 \r（回车）和 \n（换行），判断当前是否完成了一行的读取 */
+http_conn::LINE_STATUS http_conn::parse_line()
+{
     char temp;
-    for (; m_checked_idx < m_read_idx; ++m_checked_idx) {
+
+    /* 遍历缓冲区，从 m_checked_idx 开始检查字符，直到已读取的末尾位置 m_read_idx */
+    for (; m_checked_idx < m_read_idx; ++m_checked_idx) 
+    {
         temp = m_read_buf[m_checked_idx];
-        if (temp == '\r') {
+
+        /* 检查 \r（回车）*/
+        if (temp == '\r')
+        {
+            /* 如果 \r 是缓冲区的最后一个字符，表示行数据未完整，返回 LINE_OPEN */
             if ((m_checked_idx + 1) == m_read_idx)
+            {
                 return LINE_OPEN;
-            else if (m_read_buf[m_checked_idx + 1] == '\n') {
+            }
+
+            /* 如果下一个字符是 \n，说明读取到完整的一行，将 \r\n 替换为字符串结束符 \0，然后返回 LINE_OK */    
+            else if (m_read_buf[m_checked_idx + 1] == '\n')
+            {
                 m_read_buf[m_checked_idx++] = '\0';
                 m_read_buf[m_checked_idx++] = '\0';
                 return LINE_OK;
             }
+
+            /* 如果没有匹配的 \n，说明行数据格式错误，返回 LINE_BAD */
             return LINE_BAD;
-        } else if (temp == '\n') {
-            if (m_checked_idx > 1 && m_read_buf[m_checked_idx - 1] == '\r') {
+        }
+
+        /* 检查 \n（换行）*/
+        else if (temp == '\n') 
+        {
+            /* 检查前一个字符是否为 \r */
+            /* 是：说明读取到完整的一行，将 \r\n 替换为字符串结束符 \0，然后返回 LINE_OK */
+            if (m_checked_idx > 1 && m_read_buf[m_checked_idx - 1] == '\r') 
+            {
                 m_read_buf[m_checked_idx - 1] = '\0';
                 m_read_buf[m_checked_idx++] = '\0';
                 return LINE_OK;
             }
+
+            /* 否：说明行数据格式错误，返回 LINE_BAD */
             return LINE_BAD;
         }
     }
-    return LINE_OPEN;
+    return LINE_OPEN;   /* 如果遍历到 m_read_idx 仍未找到完整的行，则返回 LINE_OPEN，表明需要等待更多数据 */
 }
 
 //循环读取客户数据，直到无数据可读或对方关闭连接
@@ -288,47 +315,59 @@ bool http_conn::read_once() {
     }
 }
 
-//解析http请求行，获得请求方法，目标url及http版本号
-http_conn::HTTP_CODE http_conn::parse_request_line(char *text) {
-
+/* 解析 HTTP 请求的请求行，提取 HTTP 方法、URL 和协议版本等信息，同时验证这些字段是否符合 HTTP 协议规范 */
+http_conn::HTTP_CODE http_conn::parse_request_line(char *text)
+{
     m_url = strpbrk(text, " \t");
     if (!m_url) {
         return BAD_REQUEST;
     }
-    
     *m_url++ = '\0';
     char *method = text;
+
+    /* 比较解析出的 method 字符串，支持 GET 和 POST 方法（忽略大小写) */
     if (strcasecmp(method, "GET") == 0)
+    {
         m_method = GET;
-    else if (strcasecmp(method, "POST") == 0) {
+    }
+    else if (strcasecmp(method, "POST") == 0) 
+    {
         m_method = POST;
         cgi = 1;
-    }
-    else
+    } else {
         return BAD_REQUEST;
+    } 
+
+    /* 提取 URL 和协议版本 */
     m_url += strspn(m_url, " \t");
     m_version = strpbrk(m_url, " \t");
     if (!m_version)
         return BAD_REQUEST;
     *m_version++ = '\0';
     m_version += strspn(m_version, " \t");
-    if (strcasecmp(m_version, "HTTP/1.1") != 0)
-        return BAD_REQUEST;
+
+    /* 校验协议版本 */
+    if (strcasecmp(m_version, "HTTP/1.1") != 0) { return BAD_REQUEST; }
+
+    /* 处理 URL（http:// 和 https://） */
     if (strncasecmp(m_url, "http://", 7) == 0) {
         m_url += 7;
         m_url = strchr(m_url, '/');
     }
-
     if (strncasecmp(m_url, "https://", 8) == 0) {
         m_url += 8;
         m_url = strchr(m_url, '/');
     }
 
+    /* 校验 URL */
     if (!m_url || m_url[0] != '/')
         return BAD_REQUEST;
     //当url为/时，显示判断界面
-    if (strlen(m_url) == 1)
-        strcat(m_url, "judge.html");
+    if (strlen(m_url) == 1) {
+        strcat(m_url, "home.html");
+    }
+
+    /* 更新状态机状态 */
     m_check_state = CHECK_STATE_HEADER;
     return NO_REQUEST;
 }
@@ -447,49 +486,64 @@ http_conn::HTTP_CODE http_conn::do_request() {
 
         //将用户名和密码提取出来
         //user=123&passwd=123
-        char name[100], password[100];
-        int i;
-        for (i = 5; m_string[i] != '&'; ++i)
-            name[i - 5] = m_string[i];
-        name[i - 5] = '\0';
 
-        int j = 0;
-        for (i = i + 10; m_string[i] != '\0'; ++i, ++j)
-            password[j] = m_string[i];
-        password[j] = '\0';
+        // 打印 m_string 内容
+        // Debug: m_string = user=12345&password=Password1&confirm_password=Password1
+        // if (m_string) {
+        //     printf("Debug: m_string = %s\n", m_string);
+        // } else {
+        //     printf("Debug: m_string is NULL\n");
+        //     return BAD_REQUEST;
+        // }
+        char name[100], password[100];
+        parse_form_data(m_string, name, password);
+
+        //printf("Debug: Username = %s, Password = %s\n", name, password);
 
         if (*(p + 1) == '3') {
-            //如果是注册，先检测数据库中是否有重名的
-            //没有重名的，进行增加数据
-            char *sql_insert = (char *)malloc(sizeof(char) * 200);
-            strcpy(sql_insert, "INSERT INTO user(username, passwd) VALUES(");
-            strcat(sql_insert, "'");
-            strcat(sql_insert, name);
-            strcat(sql_insert, "', '");
-            strcat(sql_insert, password);
-            strcat(sql_insert, "')");
+            // 如果是注册，先检测数据库中是否有重名的
+            // 没有重名的，进行增加数据
+            char sql_insert[512]; // 使用固定大小的缓冲区
+            char escaped_name[256], escaped_password[256];
 
+            // 转义用户输入，防止 SQL 注入
+            mysql_real_escape_string(mysql, escaped_name, name, strlen(name));
+            mysql_real_escape_string(mysql, escaped_password, password, strlen(password));
+
+            // 构建 SQL 插入语句
+            snprintf(sql_insert, sizeof(sql_insert),
+                    "INSERT INTO user(username, passwd) VALUES('%s', '%s')",
+                    escaped_name, escaped_password);
+
+            // 检查内存中的哈希表是否存在该用户
             if (users.find(name) == users.end()) {
-                m_lock.lock();
-                int res = mysql_query(mysql, sql_insert);
-                users.insert(pair<string, string>(name, password));
-                m_lock.unlock();
+                m_lock.lock(); // 加锁，确保线程安全
 
-                if (!res)
+                // 执行 SQL 语句，并检查返回值
+                int res = mysql_query(mysql, sql_insert);
+                if (res == 0) { // 插入成功
+                    users.insert(std::make_pair(name, password)); // 更新内存中的哈希表
                     strcpy(m_url, "/log.html");
-                else
+                } else { // 插入失败，打印错误信息
+                    fprintf(stderr, "MySQL Insert Error: %s\n", mysql_error(mysql));
                     strcpy(m_url, "/registerError.html");
-            }
-            else
+                }
+
+                m_lock.unlock(); // 解锁
+            } else {
+                // 用户名已存在
                 strcpy(m_url, "/registerError.html");
+            }
         }
         //如果是登录，直接判断
         //若浏览器端输入的用户名和密码在表中可以查找到，返回1，否则返回0
         else if (*(p + 1) == '2') {
-            if (users.find(name) != users.end() && users[name] == password)
+            // 验证用户名和密码
+            if (users.find(name) != users.end() && users[name] == password) {
                 strcpy(m_url, "/welcome.html");
-            else
+            } else {
                 strcpy(m_url, "/logError.html");
+            }
         }
     }
 
@@ -541,6 +595,41 @@ http_conn::HTTP_CODE http_conn::do_request() {
     close(fd);
     return FILE_REQUEST;
 }
+
+/* 从m_string中提取用户名和密码，提取表单数据，确保动态兼容性 */
+void http_conn::parse_form_data(const char *form_data, char *name, char *password) {
+    const char *user_key = "user=";
+    const char *password_key = "password=";
+
+    // 初始化缓冲区
+    name[0] = '\0';
+    password[0] = '\0';
+
+    // 提取用户名
+    const char *user_start = strstr(form_data, user_key);
+    if (user_start) {
+        user_start += strlen(user_key);
+        const char *user_end = strchr(user_start, '&'); // 查找分隔符
+        size_t user_length = user_end ? user_end - user_start : strlen(user_start);
+        if (user_length < 100) { // 防止越界
+            strncpy(name, user_start, user_length);
+            name[user_length] = '\0';
+        }
+    }
+
+    // 提取密码
+    const char *password_start = strstr(form_data, password_key);
+    if (password_start) {
+        password_start += strlen(password_key);
+        const char *password_end = strchr(password_start, '&'); // 查找分隔符
+        size_t password_length = password_end ? password_end - password_start : strlen(password_start);
+        if (password_length < 100) { // 防止越界
+            strncpy(password, password_start, password_length);
+            password[password_length] = '\0';
+        }
+    }
+}
+
 
 void http_conn::unmap() {
 

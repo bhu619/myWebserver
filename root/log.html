@@ -1,21 +1,287 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Sign in</title>
-    </head>
-    <body>
-<br/>
-<br/>
-    <div align="center"><font size="5"> <strong>登录</strong></font></div>
-    <br/>
-        <div class="login">
-                <form action="2CGISQL.cgi" method="post">
-                        <div align="center"><input type="text" name="user" placeholder="用户名" required="required"></div><br/>
-                        <div align="center"><input type="password" name="password" placeholder="登录密码" required="required"></div><br/>
-                        <div align="center"><button type="submit">确定</button></div>
-                </form>
-        </div>
-    </body>
-</html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录/注册</title>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
 
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 5px 40px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            height: 70px;
+        }
+
+        /* 首页按钮样式 */
+        .home-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ff416c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(255, 65, 108, 0.3);
+            text-decoration: none;
+        }
+
+        .home-button:hover {
+            background-color: #ff2650;
+            box-shadow: 0 6px 12px rgba(255, 65, 108, 0.5);
+        }
+
+        .home-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+
+        .container {
+            width: 400px;
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: auto;
+            margin-top: 100px; /* 留出顶部导航栏的空间 */
+            transform: translateY(50%)
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .tabs button {
+            flex: 1;
+            padding: 10px 0;
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+        }
+
+        .tabs button.active {
+            color: #ff416c;
+            border-bottom: 2px solid #ff416c;
+        }
+
+        .form {
+            display: none;
+        }
+
+        .form.active {
+            display: block;
+        }
+
+        .form .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form label {
+            font-size: 14px;
+            color: #666;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form input {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .code-container, .password-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .code-container input, .password-container input {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .code-container .get-code {
+            position: absolute;
+            right: 10px;
+            font-size: 14px;
+            color: #ff416c;
+            background: none;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            padding: 0;
+        }
+
+        .code-container .get-code:hover {
+            text-decoration: underline;
+        }
+
+        .password-container .forgot-password {
+            position: absolute;
+            right: 10px;
+            font-size: 14px;
+            color: #ff416c;
+            text-decoration: none;
+            cursor: pointer;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .password-container .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .form .submit-btn {
+            width: 100%;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #ff416c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .form .submit-btn:hover {
+            background-color: #ff2650;
+        }
+
+        .form .terms {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        .form .terms a {
+            color: #ff416c;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="header">
+        <a href="/home.html" class="home-button">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/home.png" alt="home icon">
+            首页
+        </a>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="container">
+        <div class="tabs">
+            <button class="active" onclick="switchTab(0)">扫码登录</button>
+            <button onclick="switchTab(1)">验证码登录</button>
+            <button onclick="switchTab(2)">密码登录</button>
+        </div>
+
+        <!-- 扫码登录 -->
+        <div class="form active" id="form-0">
+            <p>请使用微信扫一扫登录</p>
+            <img src="https://img.icons8.com/?size=100&id=48423&format=png&color=000000" alt="二维码" style="width: 150px; height: 150px; margin: 20px 0;">
+        </div>
+
+        <!-- 验证码登录 -->
+        <div class="form" id="form-1">
+            <div class="input-group">
+                <label for="phone">手机号</label>
+                <input type="tel" id="phone" name="phone" placeholder="请输入手机号" required="required">
+            </div>
+            <div class="input-group">
+                <label for="code">验证码</label>
+                <div class="code-container">
+                    <input type="text" id="code" name="code" placeholder="请输入验证码" required="required">
+                    <button class="get-code" onclick="getCode()">获取验证码</button>
+                </div>
+            </div>
+            <button class="submit-btn">登录/注册</button>
+            <p class="terms">
+                登录或注册即代表同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a>
+            </p>
+        </div>
+
+        <!-- 密码登录 -->
+        <div class="form" id="form-2">
+            <form action="2CGISQL.cgi" method="post">
+                <div class="input-group">
+                    <label for="phone-password">用户名</label>
+                    <!-- 添加 name 属性 -->
+                    <input type="text" id="phone-password" name="user" placeholder="请输入用户名" required="required">
+                </div>
+                <div class="input-group">
+                    <label for="password">密码</label>
+                    <div class="password-container">
+                        <!-- 添加 name 属性 -->
+                        <input type="password" id="password" name="password" placeholder="请输入密码" required="required">
+                        <a href="#" class="forgot-password">忘记密码</a>
+                    </div>
+                </div>
+                <button class="submit-btn">登录</button>
+                <p class="terms">
+                    登录即代表同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(index) {
+            // 切换选项卡
+            const tabs = document.querySelectorAll(".tabs button");
+            const forms = document.querySelectorAll(".form");
+            tabs.forEach((tab, i) => {
+                tab.classList.toggle("active", i === index);
+                forms[i].classList.toggle("active", i === index);
+            });
+        }
+
+        function getCode() {
+            alert("验证码已发送！");
+        }
+    </script>
+</body>
+</html>

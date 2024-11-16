@@ -1,15 +1,129 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>awsl</title>
-    </head>
-    <body><br/>
-<br/>
-<div align="center"><font size="5"> <strong>嘿嘿，你来啦，更多资料，请关注 “两猿社” 喔.</strong></font></div>
-<br/>
-<!--<div  align="center">a w s l</div>-->
-<br/>
-<br/>
-<div align="center"><img src="./test1.jpg" title="awsl"/></div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>awsl</title>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: #f9f9f9;
+            height: 100vh;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 5px 40px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            height: 70px;
+        }
+
+        .home-button {
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            background-color: #ff416c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 25px; 
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(255, 65, 108, 0.3);
+            text-decoration: none;
+        }
+
+        .home-button:hover {
+            background-color: #ff2650;
+            box-shadow: 0 6px 12px rgba(255, 65, 108, 0.5);
+        }
+
+        .home-button img {
+            width: 20px; 
+            height: 20px;
+            margin-right: 8px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* 中间主要内容 */
+        .main {
+            margin-top: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* 保持内容左对齐 */
+            padding: 0 20px; /* 增加内容的内边距 */
+            max-width: 700px; /* 限制内容宽度 */
+            margin-left: auto;
+            margin-right: auto; /* 居中页面 */
+        }
+
+        .main h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center; /* 居中标题 */
+            align-self: center; /* 强制让 h1 居中 */
+            width: 100%; /* 避免布局偏移 */
+        }
+
+        .main p {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.8;
+            margin: 10px 0; /* 增加段落之间的间距 */
+            text-align: left; /* 确保段落左对齐 */
+        }
+
+        .main p a {
+            color: #ff416c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .main p a:hover {
+            text-decoration: underline;
+            color: #ff2650;
+        }
+
+        .footer {
+            font-size: 14px;
+            color: #666;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="header">
+        <a href="/welcome.html" class="home-button">
+            <img src="https://img.icons8.com/?size=100&id=Q1xkcFuVON39&format=png&color=000000" alt="home icon">
+            返回
+        </a>
+    </div>
+
+    <!-- 中间主要内容 -->
+    <div class="main">
+        <h1>更多内容和项目源码请见</h1>
+        <p>我的 Github：<a href="https://github.com/bhu619" target="_blank">https://github.com/bhu619</a></p>
+        <p>我的 CSDN：<a href="https://blog.csdn.net/Teriri_?type=blog" target="_blank">https://blog.csdn.net/Teriri_?type=blog</a></p>
+        <p>Webserver 项目解读 / 代码分析 / 改进：<a href="https://www.yuque.com/u39624144/zvaea9/aqktb26g923rsiv5" target="_blank">https://www.yuque.com/u39624144/zvaea9/aqktb26g923rsiv5</a></p>
+        <p>《Linux 高性能服务器编程》总结：<a href="https://blog.csdn.net/teriri_/category_12760091.html" target="_blank">https://blog.csdn.net/teriri_/category_12760091.html</a></p>
+    </div>
+</body>
 </html>

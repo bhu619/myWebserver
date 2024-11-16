@@ -112,7 +112,10 @@ private:
     HTTP_CODE do_request();
     char *get_line() { return m_read_buf + m_start_line; };
     LINE_STATUS parse_line();
+
     void unmap();
+    void parse_form_data(const char *form_data, char *name, char *password);
+
     bool add_response(const char *format, ...);
     bool add_content(const char *content);
     bool add_status_line(int status, const char *title);
