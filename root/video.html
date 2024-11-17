@@ -93,6 +93,45 @@
             font-size: 14px;
             color: #666;
         }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                width: 70%; /* 让内容适配手机屏幕 */
+                padding: 15px;
+                margin-top: 120px;
+                transform: translateY(0); /* 调整为自然对齐 */
+            }
+
+            .tabs button {
+                font-size: 14px; /* 缩小选项卡字体 */
+            }
+
+            .form input, .code-container input, .password-container input {
+                font-size: 12px; /* 缩小输入框字体 */
+            }
+
+            .form .submit-btn {
+                font-size: 14px; /* 缩小按钮字体 */
+                padding: 8px 15px;
+            }
+
+            .form .terms {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                height: 60px;
+            }
+
+            .home-button {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+        }
+        
     </style>
 </head>
 <body>
