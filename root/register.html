@@ -21,7 +21,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            padding: 5px 40px;
+            padding: 5px 20px; /* 调整内边距适配移动端 */
             background-color: white;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: fixed;
@@ -39,7 +39,7 @@
             color: white;
             font-size: 16px;
             font-weight: bold;
-            padding: 10px 25px;
+            padding: 10px 20px;
             border: none;
             border-radius: 25px;
             cursor: pointer;
@@ -68,8 +68,8 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             margin: auto;
-            margin-top: 120px; /* 留出顶部导航栏的空间 */
-            transform: translateY(50%);
+            margin-top: 120px;
+            transform: translateY(32%);
         }
 
         .container h2 {
@@ -132,6 +132,50 @@
         .terms a {
             color: #ff416c;
             text-decoration: none;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 15px 20px;
+                margin-top: 100px;
+                transform: translateY(0); /* 调整为自然对齐 */
+            }
+
+            .container h2 {
+                font-size: 20px;
+            }
+
+            .input-group input {
+                font-size: 12px; /* 缩小字体以适配手机 */
+                padding: 10px;
+            }
+
+            .submit-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .terms {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                height: 60px;
+            }
+
+            .home-button {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .home-button img {
+                width: 18px;
+                height: 18px;
+            }
         }
     </style>
     <script>

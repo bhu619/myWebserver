@@ -21,7 +21,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            padding: 5px 40px;
+            padding: 5px 20px; /* 调整内边距 */
             background-color: white;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: fixed;
@@ -60,6 +60,7 @@
             margin-right: 8px;
         }
 
+        /* 容器样式 */
         .container {
             width: 400px;
             background: #fff;
@@ -69,7 +70,7 @@
             text-align: center;
             margin: auto;
             margin-top: 100px; /* 留出顶部导航栏的空间 */
-            transform: translateY(50%)
+            transform: translateY(50%);
         }
 
         .tabs {
@@ -200,6 +201,44 @@
             color: #ff416c;
             text-decoration: none;
         }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%; /* 让内容适配手机屏幕 */
+                padding: 15px;
+                margin-top: 120px;
+                transform: translateY(0); /* 调整为自然对齐 */
+            }
+
+            .tabs button {
+                font-size: 14px; /* 缩小选项卡字体 */
+            }
+
+            .form input, .code-container input, .password-container input {
+                font-size: 12px; /* 缩小输入框字体 */
+            }
+
+            .form .submit-btn {
+                font-size: 14px; /* 缩小按钮字体 */
+                padding: 8px 15px;
+            }
+
+            .form .terms {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                height: 60px;
+            }
+
+            .home-button {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -249,13 +288,11 @@
             <form action="2CGISQL.cgi" method="post">
                 <div class="input-group">
                     <label for="phone-password">用户名</label>
-                    <!-- 添加 name 属性 -->
                     <input type="text" id="phone-password" name="user" placeholder="请输入用户名" required="required">
                 </div>
                 <div class="input-group">
                     <label for="password">密码</label>
                     <div class="password-container">
-                        <!-- 添加 name 属性 -->
                         <input type="password" id="password" name="password" placeholder="请输入密码" required="required">
                         <a href="#" class="forgot-password">忘记密码</a>
                     </div>
@@ -270,7 +307,6 @@
 
     <script>
         function switchTab(index) {
-            // 切换选项卡
             const tabs = document.querySelectorAll(".tabs button");
             const forms = document.querySelectorAll(".form");
             tabs.forEach((tab, i) => {

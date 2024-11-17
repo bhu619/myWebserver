@@ -32,7 +32,7 @@
         .header .button-group {
             display: flex;
             gap: 20px; /* 按钮之间的间距 */
-            transform: translateX(-70px); /* 向左移动 20px */
+            transform: translateX(-70px); 
         }
 
         .button {
@@ -140,24 +140,62 @@
             width: 40px;
             height: 40px;
         }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header {
+                padding: 5px 20px; /* 减少导航栏内边距 */
+            }
+
+            .button {
+                font-size: 14px; /* 缩小按钮字体大小 */
+                padding: 8px 15px; /* 调整按钮大小 */
+            }
+
+            .search-bar {
+                padding: 10px 15px; /* 减少搜索框内边距 */
+                max-width: 100%; /* 搜索框宽度填满屏幕 */
+            }
+
+            .search-bar input {
+                font-size: 14px; /* 缩小输入框字体 */
+            }
+
+            .search-bar .icons img {
+                width: 20px;
+                height: 20px; /* 缩小图标大小 */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main h1 {
+                font-size: 20px; /* 缩小标题字体 */
+            }
+
+            .button {
+                font-size: 12px; /* 再次缩小按钮字体 */
+                padding: 6px 10px;
+            }
+
+            .search-bar input {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- 顶部导航栏 -->
     <div class="header">
         <div class="button-group">
-            <!-- 注册按钮 -->
             <form action="0" method="post" style="margin: 0;">
                 <button type="submit" class="button">
                     <img src="https://img.icons8.com/?size=100&id=IVlCJgXg1RYx&format=png&color=000000" alt="register icon">
                     注册
                 </button>
             </form>
-
-            <!-- 登录按钮 -->
             <form action="1" method="post" style="margin: 0;">
                 <button type="submit" class="button">
-                    <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=000000" alt="login icon" >
+                    <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=000000" alt="login icon">
                     登录
                 </button>
             </form>
