@@ -15,10 +15,10 @@
 [小白视角：一文读懂社长的TinyWebServer](https://www.yuque.com/u39624144/zvaea9/uxmd9dc0wav703te?singleDoc#)
 
 ## 效果展示
-### 电脑端网页浏览
+#### 电脑端网页浏览
 ![电脑端网页展示](/root/1.png)
 
-### 移动端网页浏览
+#### 移动端网页浏览
 ![移动端网页展示](/root/2.png)
 
 
