@@ -5,23 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>awsl</title>
     <style>
-        /* 基础样式 */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f9f9f9;
             display: flex;
             flex-direction: column;
-            background-color: #f9f9f9;
             height: 100vh;
         }
 
-        /* 顶部导航栏 */
         .header {
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            padding: 5px 40px;
+            padding: 5px 20px;
             background-color: white;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: fixed;
@@ -32,14 +30,14 @@
         }
 
         .home-button {
-            display: flex; 
+            display: flex;
             align-items: center;
             justify-content: center;
             background-color: #ff416c;
             color: white;
             font-size: 16px;
             font-weight: bold;
-            padding: 10px 25px; 
+            padding: 10px 20px;
             border: none;
             border-radius: 25px;
             cursor: pointer;
@@ -48,45 +46,37 @@
             text-decoration: none;
         }
 
-        .home-button:hover {
-            background-color: #ff2650;
-            box-shadow: 0 6px 12px rgba(255, 65, 108, 0.5);
-        }
-
         .home-button img {
-            width: 20px; 
+            width: 20px;
             height: 20px;
             margin-right: 8px;
-            filter: brightness(0) invert(1);
         }
 
-        /* 中间主要内容 */
         .main {
             margin-top: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start; /* 保持内容左对齐 */
-            padding: 0 20px; /* 增加内容的内边距 */
-            max-width: 700px; /* 限制内容宽度 */
+            padding: 0 20px;
+            max-width: 700px;
             margin-left: auto;
-            margin-right: auto; /* 居中页面 */
+            margin-right: auto;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .main h1 {
             font-size: 28px;
             color: #333;
             margin-bottom: 30px;
-            text-align: center; /* 居中标题 */
-            align-self: center; /* 强制让 h1 居中 */
-            width: 100%; /* 避免布局偏移 */
+            text-align: center;
         }
 
         .main p {
             font-size: 18px;
             color: #555;
             line-height: 1.8;
-            margin: 10px 0; /* 增加段落之间的间距 */
-            text-align: left; /* 确保段落左对齐 */
+            margin: 10px 0;
+            text-align: left;
+            max-width: 100%;
+            word-wrap: break-word;
         }
 
         .main p a {
@@ -100,37 +90,16 @@
             color: #ff2650;
         }
 
-        .footer {
-            font-size: 14px;
-            color: #666;
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        /* 响应式设计 */
         @media (max-width: 768px) {
-            .container {
-                width: 70%; /* 让内容适配手机屏幕 */
-                padding: 15px;
-                margin-top: 120px;
-                transform: translateY(0); /* 调整为自然对齐 */
+            .main h1 {
+                font-size: 24px;
             }
-
-            .tabs button {
-                font-size: 14px; /* 缩小选项卡字体 */
+            .main p {
+                font-size: 16px;
             }
-
-            .form input, .code-container input, .password-container input {
-                font-size: 12px; /* 缩小输入框字体 */
-            }
-
-            .form .submit-btn {
-                font-size: 14px; /* 缩小按钮字体 */
+            .home-button {
                 padding: 8px 15px;
-            }
-
-            .form .terms {
-                font-size: 10px;
+                font-size: 14px;
             }
         }
 
@@ -138,24 +107,26 @@
             .header {
                 height: 60px;
             }
-
-            .home-button {
-                padding: 8px 15px;
+            .home-button img {
+                width: 18px;
+                height: 18px;
+            }
+            .main h1 {
+                font-size: 20px;
+            }
+            .main p {
                 font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 顶部导航栏 -->
     <div class="header">
         <a href="/welcome.html" class="home-button">
             <img src="https://img.icons8.com/?size=100&id=Q1xkcFuVON39&format=png&color=000000" alt="home icon">
             返回
         </a>
     </div>
-
-    <!-- 中间主要内容 -->
     <div class="main">
         <h1>更多内容和项目源码请见</h1>
         <p>我的 Github：<a href="https://github.com/bhu619" target="_blank">https://github.com/bhu619</a></p>
