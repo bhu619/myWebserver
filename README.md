@@ -16,19 +16,16 @@
 
 ## 效果展示
 ### 电脑端网页浏览
-![电脑端网页展示](/images/1.png)
 
 | 登录 | 图片请求 | 视频请求 |
 |------|----------|----------|
 | ![登录](images/GIF/LogIn.gif) | ![图片请求](images/GIF/Picture.gif) | ![视频请求](images/GIF/Video.gif) |
 
 ### 移动端网页浏览
-![移动端网页展示](/images/2.png)
 
 | 登录 | 图片请求 | 视频请求 |
 |------|----------|----------|
 | ![登录](images/GIF/LogIn-phone.gif) | ![图片请求](images/GIF/Picture-phone.gif) | ![视频请求](images/GIF/Video-phone.gif) |
-
 
 ## 首次使用指南
 本项目的配置步骤详见：[WebServer 项目解读 / 代码分析 / 改进（0. 配置安装）](https://www.yuque.com/u39624144/zvaea9/cbr8n7reuf3rgw58)
