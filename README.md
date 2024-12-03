@@ -17,19 +17,17 @@
 ## 效果展示
 ### 电脑端网页浏览
 ![电脑端网页展示](/images/1.png)
-<div style="display: flex; justify-content: space-around;">
-  <img src="images/GIF/LogIn.gif" alt="登录" style="width: 30%;"/>
-  <img src="images/GIF/Picture.gif" alt="图片请求" style="width: 30%;"/>
-  <img src="images/GIF/Video.gif" alt="视频请求" style="width: 30%;"/>
-</div>
+
+| 登录 | 图片请求 | 视频请求 |
+|------|----------|----------|
+| ![登录](images/GIF/LogIn.gif) | ![图片请求](images/GIF/Picture.gif) | ![视频请求](images/GIF/Video.gif) |
 
 ### 移动端网页浏览
 ![移动端网页展示](/images/2.png)
-<div style="display: flex; justify-content: space-around;">
-  <img src="images/GIF/LogIn-phone.gif" alt="登录" style="width: 30%;"/>
-  <img src="images/GIF/Picture-phone.gif" alt="图片请求" style="width: 30%;"/>
-  <img src="images/GIF/Video-phone.gif" alt="视频请求" style="width: 30%;"/>
-</div>
+
+| 登录 | 图片请求 | 视频请求 |
+|------|----------|----------|
+| ![登录](images/GIF/LogIn-phone.gif) | ![图片请求](images/GIF/Picture-phone.gif) | ![视频请求](images/GIF/Video-phone.gif) |
 
 
 ## 首次使用指南
