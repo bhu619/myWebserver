@@ -5,3 +5,9 @@
 *.log
 
 server
+
+# Ignore .vscode folder
+.vscode/
+
+# Ignore makefile
+makefile
